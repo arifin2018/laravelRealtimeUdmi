@@ -5044,6 +5044,18 @@ module.exports = {
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
+// Echo.channel("notifications").listen("UserSessionChanged", (e) => {
+Echo["private"]("notifications").listen("UserSessionChanged", function (e) {
+  console.log("hai");
+  console.log(e);
+  var getElement = document.getElementById("notification");
+  getElement.innerText = e.message;
+  getElement.classList.remove("invisible");
+  getElement.classList.remove("alert-danger");
+  getElement.classList.remove("alert-success");
+  getElement.classList.add("alert-" + e.type);
+});
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":

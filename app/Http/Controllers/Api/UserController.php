@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -14,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        return UserResource::collection(User::all());
     }
 
     /**
@@ -24,7 +26,6 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -35,7 +36,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $data['password'] = bcrypt($request->password);
+        User::create($data);
+
+        return new UserResource($data);
     }
 
     /**
@@ -46,7 +51,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = User::findOrFail($id);
+        return new UserResource($data);
     }
 
     /**
@@ -55,9 +61,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, Request $request)
     {
-        //
+        $data = $request->all();
+        $data['password'] = bcrypt($request->password);
+
+        User::findOrFail($id)->update($data);
+        return new UserResource($data);
     }
 
     /**
@@ -69,7 +79,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+        $data['password'] = bcrypt($request->password);
+
+        User::findOrFail($id)->update($data);
+        return new UserResource($data);
     }
 
     /**
@@ -80,6 +94,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return new UserResource(User::findOrFail($id)->delete());
     }
 }

@@ -11,7 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-    <link rel="stylesheet" href="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"> --}}
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -19,7 +19,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
+    @stack('styles')
+    {{-- <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}"> --}}
 </head>
 <body>
     <div id="app">
@@ -78,9 +79,15 @@
         </nav>
 
         <main class="py-4">
+            <div id="notification" class="alert alert-success mx-3 invisible">
+                Success
+            </div>
             @yield('content')
         </main>
     </div>
 
+    <script>
+        @stack('scripts')
+    </script>
 </body>
 </html>

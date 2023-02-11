@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 
 class UserController extends Controller
 {
@@ -38,7 +39,7 @@ class UserController extends Controller
     {
         $data = $request->all();
         $data['password'] = bcrypt($request->password);
-        User::create($data);
+        $data = User::create($data);
 
         return new UserResource($data);
     }
@@ -79,10 +80,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $data = $request->all();
         $data['password'] = bcrypt($request->password);
-
-        User::findOrFail($id)->update($data);
+        User::find($id)->update($data);
+        // return UserResource::collection($data);
         return new UserResource($data);
     }
 
@@ -94,6 +96,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        return new UserResource(User::findOrFail($id)->delete());
+        Log::debug($id);
+        $user = User::findOrFail($id);
+        Log::info(json_encode($user));
+        $user->delete();
+        return "hai";
     }
 }

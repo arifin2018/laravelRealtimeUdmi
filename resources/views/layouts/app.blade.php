@@ -86,8 +86,6 @@
         </main>
     </div>
 
-    <script>
-        @stack('scripts')
-    </script>
+    @stack('scripts')
 </body>
 </html>

@@ -23,3 +23,10 @@ Broadcast::channel('notifications', function ($user) {
     // Log::info("ID => " . json_encode($id));
     return $user != null;
 });
+
+Broadcast::channel('chat', function ($user) {
+    Log::info("PRESENCT chat user => " . json_encode($user));
+    if ($user) {
+        return ['id' => $user->id, 'name' => $user->name];
+    }
+});

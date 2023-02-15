@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
@@ -67,3 +68,6 @@ Route::get('/tesCollection', function () {
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::view('/users', 'users.showAll')->name('users.all');
 Route::view('/games', 'games.showAll')->name('games.all');
+
+Route::get('/chats', [ChatController::class, 'show'])->name('chat.all')->middleware('auth');
+Route::post('/chats/store', [ChatController::class, 'store'])->name('chat.message')->middleware('auth');

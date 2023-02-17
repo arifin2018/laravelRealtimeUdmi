@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Events\MessageSent;
+use App\Events\GreatingChat;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
@@ -31,5 +33,12 @@ class ChatController extends Controller
         broadcast(new MessageSent($request->user(), $request->message));
 
         return response()->json('message broadcast');
+    }
+
+    public function greet(Request $request, User $id)
+    {
+        broadcast(new GreatingChat($request->user(), "Kamu mencoba menyapa {$id->name}"));
+        broadcast(new GreatingChat($id, "{$request->user()->name} menyapa anda"));
+        return response()->json('message success');
     }
 }

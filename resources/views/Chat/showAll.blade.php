@@ -2,7 +2,9 @@
 @push('styles')
 
 <style>
-
+#users > li{
+    cursor: pointer;
+}
 </style>
 
 
@@ -55,10 +57,10 @@
     const usersElementMessages = document.getElementById('messages');
     Echo.join('chat')
     .here((users)=>{
-        console.log(users);
         users.forEach((user, index) => {
             let element = document.createElement('li');
             element.setAttribute('id',user.id);
+            element.setAttribute('onclick', 'greetUser('+user.id+')');
             element.innerText = user.name;
 
             usersElement.appendChild(element);
@@ -67,6 +69,7 @@
     .joining((user)=>{
         let element = document.createElement('li');
         element.setAttribute('id',user.id);
+        element.setAttribute('onclick', 'greetUser('+user.id+')');
         element.innerText = user.name;
 
         usersElement.appendChild(element);
@@ -80,8 +83,49 @@
         element.innerText = e.user.name+":"+e.message;
 
         usersElementMessages.appendChild(element);
+    }).listen('GreatingChat', function (e) {
+        let element = document.createElement('li');
+        element.setAttribute('id','message'+e.user.id);
+        element.innerText = e.user.name+":"+e.message;
+
+        usersElementMessages.appendChild(element);
     });
 </script>
+<script>
+    const meessageElement = document.getElementById('message');
+    const sendElement = document.getElementById('send');
+
+    sendElement.addEventListener('click', (e)=>{
+        e.preventDefault();
+
+        try {
+            window.axios.post('/chats/store', {
+                message:meessageElement.value
+            });
+        } catch (error) {
+            window.axios.get('/login');
+        }
+        meessageElement.value = ''
+    })
+</script>
+<script>
+    function greetUser(id){
+        console.log('hai' + id);
+        window.axios.post('/chats/greet/' + id);
+    };
+</script>
+
+<script>
+    Echo.private('chat.{{ auth()->user()->id }}').listen('GreatingChat',(e)=>{
+        let element = document.createElement('li');
+        element.setAttribute('id','message'+e.user.id);
+        element.innerText = e.user.name+":"+e.message;
+
+        usersElementMessages.appendChild(element);
+    });
+</script>
+
+
 <script>
 
     const inputElement = document.getElementById('message');
@@ -103,22 +147,4 @@
     }
 
 </script>
-<script>
-    const meessageElement = document.getElementById('message');
-    const sendElement = document.getElementById('send');
-
-    sendElement.addEventListener('click', (e)=>{
-        e.preventDefault();
-
-        try {
-            window.axios.post('/chats/store', {
-                message:meessageElement.value
-            });
-        } catch (error) {
-            window.axios.get('/login');
-        }
-        meessageElement.value = ''
-    })
-</script>
-
 @endpush

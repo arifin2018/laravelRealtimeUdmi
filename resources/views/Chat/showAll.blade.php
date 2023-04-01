@@ -60,7 +60,8 @@
         users.forEach((user, index) => {
             let element = document.createElement('li');
             element.setAttribute('id',user.id);
-            element.setAttribute('onclick', 'greetUser('+user.id+')');
+            element.setAttribute('ondblclick', 'greetUser('+user.id+')');
+            element.setAttribute('onclick', 'notifications('+user.id+')');
             element.innerText = user.name;
 
             usersElement.appendChild(element);
@@ -69,7 +70,8 @@
     .joining((user)=>{
         let element = document.createElement('li');
         element.setAttribute('id',user.id);
-        element.setAttribute('onclick', 'greetUser('+user.id+')');
+        element.setAttribute('ondblclick', 'greetUser('+user.id+')');
+        element.setAttribute('onclick', 'notifications('+user.id+')');
         element.innerText = user.name;
 
         usersElement.appendChild(element);
@@ -113,6 +115,18 @@
         console.log('hai' + id);
         window.axios.post('/chats/greet/' + id);
     };
+
+    function notifications(id){
+        window.axios.post('/chats/alert/'+id);
+    }
+</script>
+
+<script>
+
+    Echo.private('notif.{{ auth()->user()->id }}').listen('NotificationChat',(e)=>{
+        alert(e.alert);
+    });
+
 </script>
 
 <script>

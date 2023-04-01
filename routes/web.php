@@ -72,3 +72,4 @@ Route::view('/games', 'games.showAll')->name('games.all');
 Route::get('/chats', [ChatController::class, 'show'])->name('chat.all')->middleware('auth');
 Route::post('/chats/store', [ChatController::class, 'store'])->name('chat.message')->middleware('auth');
 Route::post('/chats/greet/{id}', [ChatController::class, 'greet'])->name('chat.greetMessage')->middleware('auth');
+Route::post('/chats/alert/{id}', [ChatController::class, 'notification'])->name('chat.notification')->middleware('auth');
